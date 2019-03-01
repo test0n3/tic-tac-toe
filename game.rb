@@ -52,6 +52,11 @@ def compare_with_winners()
   end
   if winner
     puts "GAME OVER: WIN #{@turn}"
+  else
+    if @current_game.join("").count("-") == 0
+      puts "GAME OVER: TIED MATCH"
+      return true
+    end
   end
   winner
 end
@@ -65,12 +70,14 @@ def machine_turn
 end
 
 def valid_move
+  
   if @current_game[@row][@column] === "-"
     update_game
   else
     get_move_user if @turn === "u"
     machine_turn if @turn === "c"
   end
+
 end
 
 def game
