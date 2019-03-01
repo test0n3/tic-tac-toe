@@ -3,22 +3,22 @@
 # puts "-> Your turn"
 
 @winners = [
-  Regex.new(/^u...u...u$/),
-  Regex.new(/^..u.u.u..$/),  
-  Regex.new(/^u..u..u..$/),  
-  Regex.new(/^.u..u..u.$/),  
-  Regex.new(/^..u..u..u$/),  
-  Regex.new(/^uuu......$/),  
-  Regex.new(/^...uuu...$/),  
-  Regex.new(/^......uuu$/),
-  Regex.new(/^c...c...c$/),
-  Regex.new(/^..c.c.c..$/),  
-  Regex.new(/^c..c..c..$/),  
-  Regex.new(/^.c..c..c.$/),  
-  Regex.new(/^..c..c..c$/),  
-  Regex.new(/^ccc......$/),  
-  Regex.new(/^...ccc...$/),  
-  Regex.new(/^......ccc$/),  
+  Regexp.new(/^u...u...u$/),
+  Regexp.new(/^..u.u.u..$/),
+  Regexp.new(/^u..u..u..$/),
+  Regexp.new(/^.u..u..u.$/),
+  Regexp.new(/^..u..u..u$/),
+  Regexp.new(/^uuu......$/),
+  Regexp.new(/^...uuu...$/),
+  Regexp.new(/^......uuu$/),
+  Regexp.new(/^c...c...c$/),
+  Regexp.new(/^..c.c.c..$/),
+  Regexp.new(/^c..c..c..$/),
+  Regexp.new(/^.c..c..c.$/),
+  Regexp.new(/^..c..c..c$/),
+  Regexp.new(/^ccc......$/),
+  Regexp.new(/^...ccc...$/),
+  Regexp.new(/^......ccc$/)
 ]
 
 # !!("phoneasds" =~ /^.h...$/)
@@ -32,33 +32,55 @@ def get_move_user
   @row = gets.to_i
   puts "Qué columna quieres?"
   @column = gets.to_i
+  puts "Jugada User: #{@row}, #{@column}"
   @turn = "u"
+  valid_move
 end
 
 def show_current_game
-  puts current_game.to_s
+  puts @current_game.to_s
 end
 
-def update_game(turn)
-  @current_game[@row][@column] = turn
+def update_game()
+  @current_game[@row][@column] = @turn
 end
-
 
 # !!("phoneasds" =~ /^.h...$/)
 def compare_with_winners()
-  @winners.any? do |play_win|
-    
+  win = @winners.any? do |play_win|
+    @current_game.join("") =~ play_win  
+  end
+  puts win
+  
+  # if win
+  #   gameover
+  # else
+  #   game
+  # end
+  
+end
+
+def machine_turn
+  @turn = "c"
+  @row = Random.rand(0...3)
+  @column = Random.rand(0...3)
+  puts "Jugada PC: #{@row}, #{@column}"
+  valid_move
+end
+
+def valid_move
+  if @current_game[@row][@column].nil?
+    update_game
   end
 end
 
 def game
   get_move_user
-  update_game
   show_current_game
   compare_with_winners
-  # machine_turn
-  # show_current_game
-  # compare_with_winners
+  machine_turn
+  show_current_game
+  compare_with_winners
 end
 
 game
