@@ -24,7 +24,7 @@
 # !!("phoneasds" =~ /^.h...$/)
 @row = 0
 @column = 0
-@current_game = [[],[],[]]
+@current_game = [["-","-","-"],["-","-","-"],["-","-","-"]]
 @turn = ""
 
 def get_move_user
@@ -47,17 +47,13 @@ end
 
 # !!("phoneasds" =~ /^.h...$/)
 def compare_with_winners()
-  win = @winners.any? do |play_win|
+  winner = @winners.any? do |play_win|
     @current_game.join("") =~ play_win  
   end
-  puts win
-  
-  # if win
-  #   gameover
-  # else
-  #   game
-  # end
-  
+  if winner
+    puts "GAME OVER: WIN #{@turn}"
+  end
+  winner
 end
 
 def machine_turn
@@ -69,18 +65,22 @@ def machine_turn
 end
 
 def valid_move
-  if @current_game[@row][@column].nil?
+  if @current_game[@row][@column] === "-"
     update_game
+  else
+    get_move_user if @turn === "u"
+    machine_turn if @turn === "c"
   end
 end
 
 def game
   get_move_user
   show_current_game
-  compare_with_winners
+  return if compare_with_winners
   machine_turn
   show_current_game
-  compare_with_winners
+  return if compare_with_winners
+  game
 end
 
 game
